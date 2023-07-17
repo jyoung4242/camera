@@ -1,16 +1,15 @@
 import { v4 as uuidv4 } from "uuid";
 import { Entity } from "../ECS/entity";
 
-export class DemoEntity {
+export class KeypressEntity {
   static create() {
     return Entity.create({
       id: uuidv4(),
       components: {
-        name: "Bob",
-        color: "red",
-        position: [50, 50],
+        color: "Grey",
+        position: [375, 250],
         velocity: [0, 0],
-        keyboard: { display: false, control: true },
+        keyboard: { display: true, control: false },
       },
     });
   }

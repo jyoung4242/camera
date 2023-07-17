@@ -43,7 +43,7 @@ export class KeyboardSystem extends System {
   }
 
   public processEntity(entity: KeyboardEntity): boolean {
-    return entity.velocity != null && entity.keyboard != null;
+    return entity.velocity != null && (entity.keyboard.display || entity.keyboard.control) != null;
   }
 
   public update = (deltaTime: number, now: number, entities: KeyboardEntity[]): void => {
@@ -52,32 +52,37 @@ export class KeyboardSystem extends System {
         return;
       }
 
-      if (this.held_direction[0] != undefined) entity.keyboard = this.held_direction[0];
-      else entity.keyboard = "";
-      //console.log(entity);
+      if (entity.keyboard.display) {
+        console.log(entity.keyboard.keyString);
+        let press = this.held_direction[0];
+        console.log(press);
+        if (press != undefined) entity.keyboard.keyString = press.toUpperCase().split("")[0];
+      }
 
-      switch (this.held_direction[0]) {
-        case "up":
-          entity.velocity.y = -ENTITY_SPEED;
-          entity.velocity.x = 0;
-          break;
-        case "down":
-          entity.velocity.y = ENTITY_SPEED;
-          entity.velocity.x = 0;
-          break;
-        case "left":
-          entity.velocity.x = -ENTITY_SPEED;
-          entity.velocity.y = 0;
-          break;
-        case "right":
-          entity.velocity.x = ENTITY_SPEED;
-          entity.velocity.y = 0;
-          break;
-        default:
-          entity.velocity.x = 0;
-          entity.velocity.y = 0;
+      if (entity.keyboard.control) {
+        switch (this.held_direction[0]) {
+          case "up":
+            entity.velocity.y = -ENTITY_SPEED;
+            entity.velocity.x = 0;
+            break;
+          case "down":
+            entity.velocity.y = ENTITY_SPEED;
+            entity.velocity.x = 0;
+            break;
+          case "left":
+            entity.velocity.x = -ENTITY_SPEED;
+            entity.velocity.y = 0;
+            break;
+          case "right":
+            entity.velocity.x = ENTITY_SPEED;
+            entity.velocity.y = 0;
+            break;
+          default:
+            entity.velocity.x = 0;
+            entity.velocity.y = 0;
 
-          break;
+            break;
+        }
       }
     });
   };

@@ -5,11 +5,13 @@ import { Engine } from "@peasy-lib/peasy-engine";
 //Scene Systems
 import { Camera } from "../Camera";
 import { MovementSystem } from "../Systems/Movement";
+import { KeypressDisplay } from "../Systems/DisplayKeypress";
 
 //Entities
 import { DemoEntity } from "../Entities/demo";
 import { MovementEntity } from "../Systems/Movement";
 import { KeyboardSystem } from "../Systems/Keyboard";
+import { KeypressEntity } from "../Entities/keypressdisplay";
 
 export class Test extends Scene {
   name: string = "test";
@@ -24,6 +26,7 @@ export class Test extends Scene {
   public init = (): void => {
     //default entity creation
     this.entities.push(DemoEntity.create());
+    this.entities.push(KeypressEntity.create());
 
     //establish Scene Systems
     this.sceneSystems.push(Camera.create({ name: "camera", entities: this.entities }));
@@ -37,7 +40,7 @@ export class Test extends Scene {
 
   update = (deltaTime: number): void | Promise<void> => {
     this.systems.forEach(system => {
-      system.update(deltaTime / 1000, 0, this.entities as MovementEntity[]);
+      system.update(deltaTime / 1000, 0, this.entities);
     });
   };
 }
