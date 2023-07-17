@@ -1,17 +1,23 @@
 import { Component } from "../ECS/component";
 
 export interface IKeyboardComponent {
-  keyboard: KeyType;
+  display: boolean;
+  control: boolean;
+  keyString: string;
 }
 
 export type KeyType = string;
 
 export interface KeyboardComponent {
-  keyboard: KeyType;
+  keyboard: {
+    display: boolean;
+    control: boolean;
+    keyString: string;
+  };
 }
 
 export class Keyboard extends Component {
-  /* public template = `
+  public template = `
     <style>
       .keypressIndicator {
         position: absolute;
@@ -20,16 +26,28 @@ export class Keyboard extends Component {
         top: -8px;
         left: -8px;
         z-Index: 3;
+        font-size: x-small;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
       }
     </style>
-    <div class="keypressIndicator">\${keyboard}</div>
-    `; */
-  public value: IKeyboardComponent = { keyboard: "" };
+    <div class="keypressIndicator">\${keyString}</div>
+    `;
+
+  public value: IKeyboardComponent = { display: false, control: false, keyString: "" };
   public keyboard: string | null;
+  public display: boolean;
+  public control: boolean;
+  public keyString: string;
   public constructor() {
     //@ts-ignore
     super("keyboard", Keyboard, false);
-    this.keyboard = null;
+    this.keyboard = "";
+    this.display = false;
+    this.control = false;
+    this.keyString = "";
   }
 
   public define(data: IKeyboardComponent): void {
@@ -37,6 +55,8 @@ export class Keyboard extends Component {
       return;
     }
     this.value = data;
-    this.keyboard = this.value.keyboard as KeyType;
+    this.control = data.control;
+    this.display = data.display;
+    this.keyString = "";
   }
 }
