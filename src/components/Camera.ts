@@ -1,4 +1,13 @@
-import { Entity } from "./ECS/entity";
+import { Vector } from "./ECS/Vector";
+
+export interface ICameraConfig {
+  name: string;
+  viewPortSystems: Array<any>;
+  gameEntities: Array<any>;
+  position: Vector;
+  size: Vector;
+  focusPoint?: Vector;
+}
 
 export class Camera {
   public template = `
@@ -36,15 +45,31 @@ export class Camera {
   </style>
 
   <view-port class="viewport">
+        < \${ viewportSystems === } \${ vpSystem <=* vpSystem }
         <camera-layer>
             < \${ entity === } \${ entity <=* entities }
         </camera-layer>
   </view-port>
   `;
 
-  private constructor(public name: string, public entities: any) {}
+  private constructor(public name: string, public entities: any, public vpSystems: Array<any>) {}
 
-  public static create(config: { name: string; entities: any }): Camera {
-    return new Camera(config.name, config.entities);
+  public static create(config: ICameraConfig): Camera {
+    return new Camera(config.name, config.gameEntities, config.viewPortSystems);
   }
+
+  public update(deltaTime: number) {
+    this.vpSystems.forEach(vps => vps.update(deltaTime / 1000, 0, this.entities));
+  }
+
+  //Camera System Methods
+  follow() {}
+  pan() {}
+  viewportShake() {}
+  cameraShake() {}
+  lerp() {}
+  viewportFlash() {}
+  cameraFlash() {}
+  cameraZoom() {}
+  setCameraBoundaries() {}
 }

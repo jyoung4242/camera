@@ -3,15 +3,15 @@ import { Scene } from "../Scene";
 import { Engine } from "@peasy-lib/peasy-engine";
 
 //Scene Systems
-import { Camera } from "../Camera";
+import { Camera, ICameraConfig } from "../Camera";
 import { MovementSystem } from "../Systems/Movement";
-import { KeypressDisplay } from "../Systems/DisplayKeypress";
 
 //Entities
 import { DemoEntity } from "../Entities/demo";
-import { MovementEntity } from "../Systems/Movement";
 import { KeyboardSystem } from "../Systems/Keyboard";
 import { KeypressEntity } from "../Entities/keypressdisplay";
+import { Vector } from "../ECS/Vector";
+import { MapEntity } from "../Entities/mapEntity";
 
 export class Test extends Scene {
   name: string = "test";
@@ -25,11 +25,17 @@ export class Test extends Scene {
   `;
   public init = (): void => {
     //default entity creation
-    this.entities.push(DemoEntity.create());
-    this.entities.push(KeypressEntity.create());
+    this.entities.push(new MapEntity());
 
-    //establish Scene Systems
-    this.sceneSystems.push(Camera.create({ name: "camera", entities: this.entities }));
+    //establish Scene Systems - Configuring Camera
+    let cConfig: ICameraConfig = {
+      name: "camera",
+      viewPortSystems: [],
+      gameEntities: this.entities,
+      position: new Vector(0, 0),
+      size: new Vector(400, 200),
+    };
+    this.sceneSystems.push(Camera.create(cConfig));
 
     //Systems
     this.systems.push(new MovementSystem(), new KeyboardSystem());

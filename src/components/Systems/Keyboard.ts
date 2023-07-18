@@ -57,6 +57,7 @@ export class KeyboardSystem extends System {
         let press = this.held_direction[0];
         console.log(press);
         if (press != undefined) entity.keyboard.keyString = press.toUpperCase().split("")[0];
+        else entity.keyboard.keyString = "";
       }
 
       if (entity.keyboard.control) {
